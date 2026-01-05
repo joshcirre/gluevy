@@ -27,7 +27,7 @@ class StudioController extends Controller
             ->where('name', $request->user()->name)
             ->first();
 
-        if (!$hostParticipant) {
+        if (! $hostParticipant) {
             $hostParticipant = $this->generateParticipantTokenAction->handle(
                 room: $room,
                 name: $request->user()->name,
@@ -50,14 +50,18 @@ class StudioController extends Controller
                 'slug' => $room->slug,
                 'status' => $room->status,
                 'livekit_room_name' => $room->livekit_room_name,
-                'participants' => $room->participants->map(fn($participant) => [
+                'is_streaming' => $room->is_streaming,
+                'streaming_started_at' => $room->streaming_started_at?->toISOString(),
+                'is_recording' => $room->is_recording,
+                'recording_started_at' => $room->recording_started_at?->toISOString(),
+                'participants' => $room->participants->map(fn ($participant) => [
                     'id' => $participant->id,
                     'name' => $participant->name,
                     'role' => $participant->role,
                     'is_connected' => $participant->is_connected,
                     'joined_at' => $participant->joined_at,
                 ]),
-                'destinations' => $room->destinations->map(fn($destination) => [
+                'destinations' => $room->destinations->map(fn ($destination) => [
                     'id' => $destination->id,
                     'type' => $destination->type,
                     'name' => $destination->name,
@@ -68,7 +72,7 @@ class StudioController extends Controller
                     'layout' => $room->activeScene()->layout,
                     'overlays' => $room->activeScene()->overlays,
                 ] : null,
-                'scenes' => $room->scenes->map(fn($scene) => [
+                'scenes' => $room->scenes->map(fn ($scene) => [
                     'id' => $scene->id,
                     'layout' => $scene->layout,
                     'overlays' => $scene->overlays,

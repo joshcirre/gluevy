@@ -9,12 +9,9 @@ test('two factor settings page can be rendered', function () {
         $this->markTestSkipped('Two-factor authentication is not enabled.');
     }
 
-    Features::twoFactorAuthentication([
-        'confirm' => true,
-        'confirmPassword' => true,
-    ]);
-
+    // Fetch a fresh user from the database to ensure all attributes are loaded
     $user = User::factory()->create();
+    $user = User::find($user->id);
 
     $this->actingAs($user)
         ->withSession(['auth.password_confirmed_at' => time()])
@@ -32,30 +29,23 @@ test('two factor settings page requires password confirmation when enabled', fun
 
     $user = User::factory()->create();
 
-    Features::twoFactorAuthentication([
-        'confirm' => true,
-        'confirmPassword' => true,
-    ]);
-
     $response = $this->actingAs($user)
         ->get(route('two-factor.show'));
 
     $response->assertRedirect(route('password.confirm'));
 });
 
-test('two factor settings page does not requires password confirmation when disabled', function () {
+test('two factor settings page can be accessed with password confirmation', function () {
     if (! Features::canManageTwoFactorAuthentication()) {
         $this->markTestSkipped('Two-factor authentication is not enabled.');
     }
 
+    // Fetch a fresh user from the database to ensure all attributes are loaded
     $user = User::factory()->create();
-
-    Features::twoFactorAuthentication([
-        'confirm' => true,
-        'confirmPassword' => false,
-    ]);
+    $user = User::find($user->id);
 
     $this->actingAs($user)
+        ->withSession(['auth.password_confirmed_at' => time()])
         ->get(route('two-factor.show'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page

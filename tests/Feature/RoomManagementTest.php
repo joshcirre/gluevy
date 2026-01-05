@@ -106,7 +106,7 @@ it('can access guest join page with valid token', function () {
 });
 
 it('returns 404 for invalid room slug', function () {
-    $response = $this->get("/join/nonexistent-room/some-token");
+    $response = $this->get('/join/nonexistent-room/some-token');
 
     $response->assertNotFound();
 });
@@ -115,6 +115,46 @@ it('returns 404 for invalid participant token', function () {
     $room = Room::factory()->create();
 
     $response = $this->get("/join/{$room->slug}/invalid-token");
+
+    $response->assertNotFound();
+});
+
+it('guest can get livekit token with valid participant token', function () {
+    $room = Room::factory()->create();
+    $participant = \App\Models\Participant::factory()->create([
+        'room_id' => $room->id,
+    ]);
+
+    $response = $this->postJson("/join/{$room->slug}/livekit-token", [
+        'participant_token' => $participant->token,
+    ]);
+
+    $response->assertSuccessful()
+        ->assertJsonStructure([
+            'data' => [
+                'access_token',
+                'ws_url',
+                'participant' => [
+                    'id',
+                    'name',
+                    'role',
+                ],
+            ],
+        ]);
+
+    // Participant should be marked as connected
+    $this->assertDatabaseHas('participants', [
+        'id' => $participant->id,
+        'is_connected' => true,
+    ]);
+});
+
+it('guest cannot get livekit token with invalid participant token', function () {
+    $room = Room::factory()->create();
+
+    $response = $this->postJson("/join/{$room->slug}/livekit-token", [
+        'participant_token' => 'invalid-token',
+    ]);
 
     $response->assertNotFound();
 });

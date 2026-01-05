@@ -4,14 +4,13 @@ use App\Actions\CreateRoomAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
-use App\Models\Room;
-use App\Models\Scene;
-use App\Models\User;
 use App\LayoutType;
+use App\Models\Room;
+use App\Models\User;
 
 it('creates a room with a default scene', function () {
     $user = User::factory()->create();
-    $action = new CreateRoomAction();
+    $action = new CreateRoomAction;
 
     $room = $action->handle($user, 'Test Room');
 
@@ -28,7 +27,7 @@ it('creates a room with a default scene', function () {
 
 it('generates unique slugs for rooms with the same name', function () {
     $user = User::factory()->create();
-    $action = new CreateRoomAction();
+    $action = new CreateRoomAction;
 
     $room1 = $action->handle($user, 'Duplicate Room');
     $room2 = $action->handle($user, 'Duplicate Room');
@@ -39,7 +38,7 @@ it('generates unique slugs for rooms with the same name', function () {
 
 it('handles special characters in room names', function () {
     $user = User::factory()->create();
-    $action = new CreateRoomAction();
+    $action = new CreateRoomAction;
 
     $room = $action->handle($user, 'My Room & Show!');
 

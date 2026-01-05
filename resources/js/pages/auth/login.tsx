@@ -1,14 +1,9 @@
 import AuthenticatedSessionController from '@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController';
 import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 import { register } from '@/routes';
 import { request } from '@/routes/password';
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, Link } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 
 interface LoginProps {
@@ -19,8 +14,8 @@ interface LoginProps {
 export default function Login({ status, canResetPassword }: LoginProps) {
     return (
         <AuthLayout
-            title="Log in to your account"
-            description="Enter your email and password below to log in"
+            title="Welcome back"
+            description="Sign in to your Gluevy account"
         >
             <Head title="Log in" />
 
@@ -31,10 +26,15 @@ export default function Login({ status, canResetPassword }: LoginProps) {
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
+                        <div className="grid gap-5">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
-                                <Input
+                                <label
+                                    htmlFor="email"
+                                    className="text-sm font-medium text-gray-300"
+                                >
+                                    Email address
+                                </label>
+                                <input
                                     id="email"
                                     type="email"
                                     name="email"
@@ -42,48 +42,68 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="email"
-                                    placeholder="email@example.com"
+                                    placeholder="you@example.com"
+                                    className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-gray-500 transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 focus:outline-none"
                                 />
-                                <InputError message={errors.email} />
+                                <InputError
+                                    message={errors.email}
+                                    className="text-red-400"
+                                />
                             </div>
 
                             <div className="grid gap-2">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                                <div className="flex items-center justify-between">
+                                    <label
+                                        htmlFor="password"
+                                        className="text-sm font-medium text-gray-300"
+                                    >
+                                        Password
+                                    </label>
                                     {canResetPassword && (
-                                        <TextLink
+                                        <Link
                                             href={request()}
-                                            className="ml-auto text-sm"
+                                            className="text-sm text-violet-400 transition hover:text-violet-300"
                                             tabIndex={5}
                                         >
                                             Forgot password?
-                                        </TextLink>
+                                        </Link>
                                     )}
                                 </div>
-                                <Input
+                                <input
                                     id="password"
                                     type="password"
                                     name="password"
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"
-                                    placeholder="Password"
+                                    placeholder="Enter your password"
+                                    className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-gray-500 transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 focus:outline-none"
                                 />
-                                <InputError message={errors.password} />
+                                <InputError
+                                    message={errors.password}
+                                    className="text-red-400"
+                                />
                             </div>
 
-                            <div className="flex items-center space-x-3">
-                                <Checkbox
+                            <div className="flex items-center gap-3">
+                                <input
                                     id="remember"
+                                    type="checkbox"
                                     name="remember"
                                     tabIndex={3}
+                                    className="h-4 w-4 rounded border-white/20 bg-white/5 text-violet-500 focus:ring-violet-500/20 focus:ring-offset-0"
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <label
+                                    htmlFor="remember"
+                                    className="text-sm text-gray-400"
+                                >
+                                    Remember me
+                                </label>
                             </div>
 
-                            <Button
+                            <button
                                 type="submit"
-                                className="mt-4 w-full"
+                                className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-3 font-semibold text-white shadow-lg shadow-violet-500/25 transition hover:shadow-xl hover:shadow-violet-500/30 disabled:cursor-not-allowed disabled:opacity-50"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
@@ -91,22 +111,26 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 {processing && (
                                     <LoaderCircle className="h-4 w-4 animate-spin" />
                                 )}
-                                Log in
-                            </Button>
+                                Sign in
+                            </button>
                         </div>
 
-                        <div className="text-center text-sm text-muted-foreground">
+                        <div className="text-center text-sm text-gray-400">
                             Don't have an account?{' '}
-                            <TextLink href={register()} tabIndex={5}>
-                                Sign up
-                            </TextLink>
+                            <Link
+                                href={register()}
+                                tabIndex={5}
+                                className="font-medium text-violet-400 transition hover:text-violet-300"
+                            >
+                                Create one
+                            </Link>
                         </div>
                     </>
                 )}
             </Form>
 
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <div className="mt-4 rounded-lg bg-green-500/10 p-3 text-center text-sm font-medium text-green-400">
                     {status}
                 </div>
             )}

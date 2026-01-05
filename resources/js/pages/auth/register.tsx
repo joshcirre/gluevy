@@ -1,20 +1,15 @@
 import RegisteredUserController from '@/actions/App/Http/Controllers/Auth/RegisteredUserController';
-import { login } from '@/routes';
-import { Form, Head } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
-
 import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
+import { login } from '@/routes';
+import { Form, Head, Link } from '@inertiajs/react';
+import { LoaderCircle } from 'lucide-react';
 
 export default function Register() {
     return (
         <AuthLayout
-            title="Create an account"
-            description="Enter your details below to create your account"
+            title="Create your account"
+            description="Start streaming in minutes"
         >
             <Head title="Register" />
             <Form
@@ -25,10 +20,15 @@ export default function Register() {
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
+                        <div className="grid gap-5">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
-                                <Input
+                                <label
+                                    htmlFor="name"
+                                    className="text-sm font-medium text-gray-300"
+                                >
+                                    Full name
+                                </label>
+                                <input
                                     id="name"
                                     type="text"
                                     required
@@ -36,63 +36,87 @@ export default function Register() {
                                     tabIndex={1}
                                     autoComplete="name"
                                     name="name"
-                                    placeholder="Full name"
+                                    placeholder="John Doe"
+                                    className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-gray-500 transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 focus:outline-none"
                                 />
                                 <InputError
                                     message={errors.name}
-                                    className="mt-2"
+                                    className="text-red-400"
                                 />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
-                                <Input
+                                <label
+                                    htmlFor="email"
+                                    className="text-sm font-medium text-gray-300"
+                                >
+                                    Email address
+                                </label>
+                                <input
                                     id="email"
                                     type="email"
                                     required
                                     tabIndex={2}
                                     autoComplete="email"
                                     name="email"
-                                    placeholder="email@example.com"
+                                    placeholder="you@example.com"
+                                    className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-gray-500 transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 focus:outline-none"
                                 />
-                                <InputError message={errors.email} />
+                                <InputError
+                                    message={errors.email}
+                                    className="text-red-400"
+                                />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password">Password</Label>
-                                <Input
+                                <label
+                                    htmlFor="password"
+                                    className="text-sm font-medium text-gray-300"
+                                >
+                                    Password
+                                </label>
+                                <input
                                     id="password"
                                     type="password"
                                     required
                                     tabIndex={3}
                                     autoComplete="new-password"
                                     name="password"
-                                    placeholder="Password"
+                                    placeholder="Create a password"
+                                    className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-gray-500 transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 focus:outline-none"
                                 />
-                                <InputError message={errors.password} />
+                                <InputError
+                                    message={errors.password}
+                                    className="text-red-400"
+                                />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password_confirmation">
+                                <label
+                                    htmlFor="password_confirmation"
+                                    className="text-sm font-medium text-gray-300"
+                                >
                                     Confirm password
-                                </Label>
-                                <Input
+                                </label>
+                                <input
                                     id="password_confirmation"
                                     type="password"
                                     required
                                     tabIndex={4}
                                     autoComplete="new-password"
                                     name="password_confirmation"
-                                    placeholder="Confirm password"
+                                    placeholder="Confirm your password"
+                                    className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-gray-500 transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 focus:outline-none"
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
+                                    className="text-red-400"
                                 />
                             </div>
 
-                            <Button
+                            <button
                                 type="submit"
-                                className="mt-2 w-full"
+                                className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-3 font-semibold text-white shadow-lg shadow-violet-500/25 transition hover:shadow-xl hover:shadow-violet-500/30 disabled:cursor-not-allowed disabled:opacity-50"
                                 tabIndex={5}
                                 data-test="register-user-button"
                             >
@@ -100,14 +124,18 @@ export default function Register() {
                                     <LoaderCircle className="h-4 w-4 animate-spin" />
                                 )}
                                 Create account
-                            </Button>
+                            </button>
                         </div>
 
-                        <div className="text-center text-sm text-muted-foreground">
+                        <div className="text-center text-sm text-gray-400">
                             Already have an account?{' '}
-                            <TextLink href={login()} tabIndex={6}>
-                                Log in
-                            </TextLink>
+                            <Link
+                                href={login()}
+                                tabIndex={6}
+                                className="font-medium text-violet-400 transition hover:text-violet-300"
+                            >
+                                Sign in
+                            </Link>
                         </div>
                     </>
                 )}
